@@ -1,0 +1,427 @@
+---
+title: "COVID REPORT"
+output: html_document
+author: Mallem Selma and the Evil data team
+date: "2023-03-23"
+
+
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(patchwork)
+library(linelist)
+library(rmarkdown)
+library(knitr)
+library(kableExtra)
+library(tinytex)
+library(readxl) 
+library(dplyr)
+library(usmap)
+library(ggplot2)
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(flextable)
+library(janitor)
+covidC = read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv') %>%
+  filter(date == max(date), !is.na(fips)) 
+
+```
+
+## Summary
+
+The New York Times released a series of data files with cumulative counts of corona virus cases in the United States, at the state and county level, over time. This time series data is compiled from state and local governments and health departments in an attempt to provide a complete record of the ongoing outbreak.
+
+Since the first reported coronavirus case in Washington State on Jan. 21, 2020, The Times has tracked cases of coronavirus in real time as they were identified after testing. Because of the widespread shortage of testing, however, the data is necessarily limited in the picture it presents of the outbreak.
+
+Starting with Covid-19 data updated for March 22, 2023, reporting cases and deaths related to Covid-19 in US states by county of residence instead of the county in which the death took place.
+
+The report will 
+
+## Data and methodology
+
+The data set contains cumulative counts of coronavirus cases and deaths with most current numbers for each geography, live data.
+The live data may be a partial count released during the day but cannot necessarily be considered the final, end-of-day tally.
+
+Each row of data reports the cumulative number of coronavirus cases and deaths based on best reporting up to the moment  published an update. The counts include both laboratory confirmed and probable cases using criteria that were developed by states and the federal government. Not all geographies are reporting probable cases and yet others are providing confirmed and probable as a single total.
+
+State and county files contain FIPS codes, a standard geographic identifier, to make it easier for an analyst to combine this data with other data sets like a map file or population data.
+
+Because these are updated throughout the day, they can have inconsistent counts, are more likely to contain errors, and should be considered less reliable than the historical data. Different areas of the country update at different times and our data collection process can move at a different pace as well.
+
+In the data set, the case and death fields have the following definitions:
+
+- **cases:** The total number of cases of Covid-19, including both confirmed and probable.
+- **deaths:** The total number of deaths from Covid-19, including both confirmed and probable.
+
+The process of recording cases has been straightforward. But because of the patchwork of reporting methods for this data across more than 50 state and territorial governments and hundreds of local health departments,New York Times journalists sometimes had to make difficult interpretations about how to count and record cases.
+
+The data will in some cases not exactly match with the information reported by states and counties. Those differences include these cases: When the federal government arranged flights to the United States for Americans exposed to the coronavirus in China and Japan, The NY Times team recorded those cases in the states where the patients subsequently were treated, even though local health departments generally did not. When a resident of Florida died in Los Angeles, The NY Times team recorded her death as having occurred in California rather than Florida, though officials in Florida counted her case in their own records. And when officials in some states reported new cases without immediately identifying where the patients were being treated, The NY Times team attempted to add information about their locations later, once it became available.
+
+"**Probable**" and “**Confirmed**" Cases and Deaths
+Cases and deaths can be reported as either “confirmed” or “probable.” The total cases and deaths include both. The number of cases includes all cases, including those who have since recovered or died.
+
+Some governments continue to report only confirmed cases, while others are reporting both confirmed and probable numbers. And there is also another set of governments that is reporting the two types of numbers combined without providing a way to separate the confirmed from the probable.
+
+**The Geographic Exceptions section below has more details on specific areas. The methodology of individual states changes frequently.**
+
+- **Confirmed Cases**
+
+Confirmed cases are counts of individuals whose coronavirus infections were confirmed by a laboratory test and reported by a federal, state, territorial or local government agency. Only tests that detect viral RNA in a sample are considered confirmatory. These are often called molecular or RT-PCR tests.
+
+- **Probable Cases**
+
+Probable cases count individuals who did not have a confirmed test but were evaluated by public health officials using criteria developed by states and the federal government and reported by a health department.
+
+Public health officials consider laboratory, epidemiological, clinical and vital records evidence. Tests that detect antigens or antibodies are considered evidence towards a “probable” case, but are not sufficient on their own, according to the Council of State and Territorial Epidemiologists.
+
+- **Confirmed Deaths**
+
+Confirmed deaths are individuals who have died and meet the definition for a confirmed Covid-19 case. Some states reconcile these records with death certificates to remove deaths from their count where Covid-19 is not listed as the cause of death. The NY Times team follows health departments in removing non-Covid-19 deaths among confirmed cases when The NY Times team have information to unambiguously know the deaths were not due to Covid-19, i.e. in cases of homicide, suicide, car crash or drug overdose.
+
+- **“Probable” Deaths**
+
+Probable deaths are deaths where Covid-19 is listed on the death certificate as the cause of death or a significant contributing condition, but where there has been no positive confirmatory laboratory test.
+
+Deaths among probable cases tracked by a state or local health department where a death certificate has not yet been filed may also be counted as a probable death.
+
+For more on how states count confirmed and probable deaths, see this article.
+
+- **Dates**
+
+For each date, The NY Times team shows the cumulative number of confirmed cases and deaths as reported that day in that county or state. All cases and deaths are counted on the date they are first announced.
+
+Each date includes all cases and deaths announced that day through midnight Eastern Time. As the West Coast and Hawaii tend to release all of their new data early enough in the day.
+
+- **Declining Counts**
+
+In some cases, the number of cases or deaths for a state or county will decline. This can occur when a state or county corrects an error in the number of cases or deaths they've reported in the past, or when a state moves cases from one county to another. When The NY Times team is able, it  will historically revise counts for all impacted dates. In other cases, this will be reflected in a single-day drop in the number of cases or deaths.
+
+- **Counties**
+
+In some instances, The NY Times team reports data from multiple counties or other non-county geographies as a single county. For instance, They report a single value for New York City, comprising the cases for New York, Kings, Queens, Bronx and Richmond Counties. In these instances the FIPS code field will be empty. (They may assign FIPS codes to these geographies in the future.) See the list of geographic exceptions.
+
+*Cities like St. Louis and Baltimore that are administered separately from an adjacent county of the same name are counted separately.*
+
+- **“Unknown” Counties**
+Many state health departments choose to report cases separately when the patient’s county of residence is unknown or pending determination. In these instances, The NY Times team records the county name as “Unknown.” As more information about these cases becomes available, the cumulative number of cases in “Unknown” counties may fluctuate.
+
+Sometimes, cases are first reported in one county and then moved to another county. As a result, the cumulative number of cases may change for a given county.
+
+## **Geographic Exceptions**
+
+**New York**
+
+All cases for the five boroughs of New York City (New York, Kings, Queens, Bronx and Richmond counties) are assigned to a single area called New York City. The number of deaths in New York City also includes probable deaths reported by the New York City health department. Deaths are reported by county of residence, except for certain periods described below.
+
+The NY Times team have changed the way The NY Times team have counted deaths in New York State a few times in response to changes in how the state and New York City report their data. See this note for an explanation and timeline.
+
+**Kansas City, Mo.**
+
+Four counties (Cass, Clay, Jackson and Platte) overlap the municipality of Kansas City, Mo. The cases and deaths that the team shows for these four counties are only for the portions exclusive of Kansas City. Cases and deaths for Kansas City are reported as their own line.
+
+**Joplin, Mo.**
+
+Starting June 25, 2020, cases and deaths for Joplin are reported separately from Jasper and Newton counties. The cases and deaths reported for those counties are only for the portions exclusive of Joplin. Joplin cases and deaths previously appeared in the counts for those counties or as Unknown.
+
+**Alaska**
+
+Data for the Bristol Bay Borough and Lake and Peninsula Borough county equivalents are reported as a single "Bristol Bay plus Lake and Peninsula" area, and data for the Yakutat City and Borough and Hoonah-Angoon Census Area county equivalents are reported together as "Yakutat plus Hoonah-Angoon".
+
+The NY Times team continues to report data for the Chugach and Copper River Census Areas together as the Valdez-Cordova Census Area even though the state began to report data for them separately in Feb. 2021.
+
+**Alameda County, Calif.**
+
+Counts for Alameda County include cases and deaths from Berkeley and the Grand Princess cruise ship.
+
+**Douglas County, Neb.**
+
+Counts for Douglas County include cases brought to the state from the Diamond Princess cruise ship.
+
+**Chicago**
+
+All cases and deaths for Chicago are reported as part of Cook County.
+
+**Guam**
+
+Counts for Guam include cases reported from the USS Theodore Roosevelt.
+
+**Puerto Rico**
+
+Data for Puerto Rico's county-equivalent municipios are available starting on May 5, 2020. This data was not available at the beginning of the outbreak and so all cases and deaths were assigned to Unknown. Puerto Rico does not report deaths at the municipio level.
+
+## Mask-Wearing Survey Data
+
+
+This data comes from a large number of interviews conducted online by the global data and survey firm Dynata at the request of The New York Times. The firm asked a question about mask use to obtain 250,000 survey responses between July 2 and July 14, enough data to provide estimates more detailed than the state level. (Several states have imposed new mask requirements since the completion of these interviews.)
+
+Specifically, each participant was asked: How often do you wear a mask in public when you expect to be within six feet of another person?
+
+This survey was conducted a single time, and at this point we have no plans to update the data or conduct the survey again.
+
+The fields have the following definitions:
+
+- **COUNTYFP:** The county FIPS code.
+- **NEVER:** The estimated share of people in this county who would say never in response to the question “How often do you wear a mask in public when you expect to be within six feet of another person?”
+- **RARELY:** The estimated share of people in this county who would say rarely
+- **SOMETIMES:** The estimated share of people in this county who would say sometimes
+- **FREQUENTLY:** The estimated share of people in this county who would say frequently
+- **ALWAYS:** The estimated share of people in this county who would say always
+
+# Methodology
+
+To transform raw survey responses into county-level estimates, the survey data was weighted by age and gender, and survey respondents’ locations were approximated from their ZIP codes. Then estimates of mask-wearing were made for each census tract by taking a weighted average of the 200 nearest responses, with closer responses getting more weight in the average. These tract-level estimates were then rolled up to the county level according to each tract’s total population.
+
+By rolling the estimates up to counties, it reduces a lot of the random noise that is seen at the tract level. In addition, the shapes in the map are constructed from census tracts that have been merged together — this helps in displaying a detailed map, but is less useful than county-level in analyzing the data.
+
+**Note** 
+The vaccination rates by Social Vurnablity Index (SVI) were added to the COVID data to measure the vaccination across states (fips). 
+
+# Summary table of cases by state
+
+California state had the most covid cases since the outbreak and Montana state had the least cases since the outbreak. 
+
+```{r, echo=F, out.height="75%"}
+covidC %>%
+  filter(!is.na(state))  %>%
+  group_by(state) %>%
+  summarise(cases = sum(cases, na.rm = T),
+  Deaths = sum(deaths, na.rm = T)) %>%
+  adorn_totals() %>%
+  qflextable()
+
+
+```
+
+  
+# Outbreak executive summary
+
+
+## Estimated mask usage from July 2020 survey
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+ mask = read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/mask-use/mask-use-by-county.csv') %>%
+    rename(fips = 'COUNTYFP')
+
+
+vax = read_csv('cdc vax mar1.csv') %>%
+    filter(FIPS != 'UNK', Recip_State != 'VI', Completeness_pct > 0, 
+           !is.na(Administered_Dose1_Recip)) %>% # drop unknown/incomplete/questionable reports
+    rename(fips = FIPS, 
+           population = Census2019,
+           vaxComplete = Series_Complete_Pop_Pct,
+           SVIcategory = SVI_CTGY)   %>%
+    select(fips, population, vaxComplete, SVIcategory)
+
+ covid =
+    left_join(covidC, mask) %>%
+    left_join(vax) %>%
+    mutate(casesPer100k = cases/population*100000,
+           deathsPer100k = deaths/population * 100000) # scale by population
+
+  summary(covid)
+  rm(covidC, mask, vax)
+```
+  
+## COVID nationally 
+  
+```{r, echo=F, warning=F, message=F}
+
+
+# VIZ 1  
+    covid %>%
+    ggplot(aes(x = deathsPer100k)) +
+    geom_histogram(color = 'orange') +
+    scale_x_log10()+
+    theme_minimal() +
+    labs( x = "Deaths per 100k",
+          y = "US Counties") +
+    theme(
+      axis.title.x = element_text(face = 'bold'),
+      axis.title.y = element_text(face = 'bold')
+    ) +
+    scale_y_continuous(expand = c(0, 0),
+                       limits = c(0, 500),
+                       breaks = c(0, 100, 200, 300, 400, 500))
+  
+  
+    covid %>% # filter the extreme outliers if you want
+    ggplot(aes(x = casesPer100k)) +
+    geom_histogram(color = 'blue') +
+    scale_x_log10()+
+    theme_minimal() +
+    labs( x = "Deaths per 100k",  
+          y = "US Counties") +
+    theme(
+      axis.title.x = element_text(face = 'bold'),
+      axis.title.y = element_text(face = 'bold')) +
+    scale_y_continuous(expand = c(0, 0),
+                       limits = c(0, 500),
+                       breaks = c(0, 100, 200, 300, 400, 500))
+    
+    
+                       
+  
+ 
+  
+```
+
+## Summary statistics and more
+
+```{r, echo=FALSE}
+
+summary(covid$deathsPer100k)
+summary(covid$casesPer100k)
+
+# Count the number of missing values in the covid dataset
+sum(is.na(covid))
+
+# Count the number of missing values in the covid variable
+sum(is.na(covid$deathsPer100k))
+sum(is.na(covid$FREQUENTLY))
+sum(is.na(covid$ALWAYS))
+sum(is.na(covid$NEVER))
+
+```
+# Outbreak executive summary {.tabset}
+
+## Barchart of confirmed covid cases in US states
+
+```{r, echo=F, warning=F, message=F}
+# Load the ggplot2 package
+library(ggplot2)
+covid <- covid %>% drop_na()
+
+covidcc <- covid %>% group_by(state)%>%
+  summarise(count = n())%>%
+  arrange(desc(count))
+
+ggplot(covidcc, aes(x = state, y = count)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  scale_x_discrete(labels = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(x = "state", y = "Number of Cases", title = "COVID-19 Cases by state")
+```
+
+# US states confirmed cases in March 22, 2023
+
+Texas is the state with the most Covid cases in March 22, 2023
+
+```{r, echo=F, warning=F, message=F}
+
+s <- map_data('state')
+ggplot(s, aes(x = long, y = lat, group = group, fill = region))+
+  geom_polygon(color = 'black')+
+  coord_map('polyconic')+
+  guides(fill = F)
+
+#2
+covidcc <- covid %>% group_by(state)%>%
+  summarise(count = n())%>%
+  arrange(desc(count))
+#merge data
+covidcc$state <- tolower(covidcc$state)
+data <- merge (s, covidcc,
+                by.x = 'region',
+                by.y = 'state')
+
+ggplot(data, aes(x = long, y = lat,
+                 group = group,
+                 fill = count)) +
+  geom_polygon(color = 'gray')+
+  coord_map('polyconic') +
+  scale_fill_gradient2(low = 'white', high = 'red') +
+  theme_void() +
+  ggtitle('COVID cases in the US by state in March 22, 2023')
+```
+
+# Mask usage in US state (updated)
+
+
+The boxplot shows how the distribution of a mask usage in the United States differs across states. 
+This shows that most US states have tendency to wear masks at certain parts of the scale. 
+
+```{r, echo=F, warning=F, message=F}
+
+# VIZ 2 "Always wears a mask"
+  covid %>%
+    ggplot(aes(x = ALWAYS)) +
+    geom_boxplot(color="black",outlier.color="grey")
+
+
+```
+
+## High and low mask usage in US counties
+
+County of Yates, New York has the most mask usage in the US. 
+County of Valley, Montana recorded the least mask usage in the US.  
+
+```{r, echo=F, warning=F, message=F}
+
+
+mask = read_csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/mask-use/mask-use-by-county.csv') %>%
+  filter(!is.na(ALWAYS))
+
+
+
+percent_always_mask <- mean(mask$ALWAYS) * 100
+
+cat("The percentage of individuals who always wore a mask is", percent_always_mask, "%")
+
+  summary(covid$ALWAYS)
+
+  covid %>%
+    select(ALWAYS,state,county) %>%
+    filter(ALWAYS >=0) %>%                                    
+    filter(ALWAYS %in% c(max(ALWAYS), min(ALWAYS)))
+
+
+```
+## Rates of vaccination 
+
+The rates of vaccination showed that more than half of the population in the US counties was vaccinated againt covid-19. 
+
+```{r, echo=F, warning=F, message=F}
+ # VIZ 3: overall vax rates
+
+  covid %>%
+    ggplot(aes(x = vaxComplete)) +
+    geom_histogram(color = 'white')
+
+#percentage of overal vax
+
+percent_vax <- mean(covid$vaxComplete)
+cat("The percentage of individuals who are vaccinated is", percent_vax, "%")
+
+# VIZ 4: vax rates by Social Vulnerability Index category
+  covid %>% 
+    ggplot(aes(y = vaxComplete, x = SVIcategory)) +
+    geom_boxplot()
+ 
+  
+  
+  # find high/low counties
+
+  covid %>%
+    select(vaxComplete,state, county) %>%
+    filter(vaxComplete >=0) %>%
+    filter(vaxComplete %in% c(max(vaxComplete), min(vaxComplete)))
+  
+ covid %>%
+    ggplot(aes(x = vaxComplete)) +
+    geom_histogram(color = "white", fill = "blue") +
+    theme_minimal() +
+    labs( x = "Vaccination Rate per county",
+          y = "County") +
+    theme(
+      axis.title.x = element_text(face = 'bold'),
+      axis.title.y = element_text(face = 'bold')
+    ) +
+    ggtitle("Vaccination Rate in the US by County")
+   
+    summary(covid$vaxComplete)
+
+ 
+```
