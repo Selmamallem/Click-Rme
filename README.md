@@ -36,6 +36,7 @@ library(ggplot2)
 library(readr)
 ```
 Upload any data you have, the data I used was from class. 
+*US states confirmed cases in March 22, 2023*
 
 ```python
 covid <- covid %>% drop_na()
@@ -50,6 +51,10 @@ ggplot(covidcc, aes(x = state, y = count)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
   labs(x = "state", y = "Number of Cases", title = "COVID-19 Cases by state")
   ```
+The Data visualization is the following: 
+**Texas is the state with the most Covid cases in March 22, 2023**
+
+![Untitled](https://github.com/Selmamallem/Click-Rme/assets/123516651/e72d410f-e3fe-4bda-85a2-3666f24b19a3)
 
 
 
