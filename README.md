@@ -26,4 +26,30 @@ The main packages that were needed were:
 - [ ] *xaringanthemer* 
 - [ ] *dplyr* :tada:
 
+## Code Chunk: Plotting
+The following code is for visualizing different data. The purpose of this code is to help users create a map for whatever data they have that contains US states. 
+**Packages to download:** 
+```python
+library(dplyr)
+library(usmap)
+library(ggplot2)
+library(readr)
+```
+Upload any data you have, the data I used was from class. 
+
+```python
+covid <- covid %>% drop_na()
+
+covidcc <- covid %>% group_by(state)%>%
+  summarise(count = n())%>%
+  arrange(desc(count))
+
+ggplot(covidcc, aes(x = state, y = count)) +
+  geom_bar(stat = "identity", fill = "orange") +
+  scale_x_discrete(labels = c("Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"))+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+  labs(x = "state", y = "Number of Cases", title = "COVID-19 Cases by state")
+  ```
+
+
 
